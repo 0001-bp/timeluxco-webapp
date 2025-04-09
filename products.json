@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "title": "Часы Tissot",
+    "price": 39990,
+    "oldPrice": 44990,
+    "article": "TIS-001",
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "description": "Швейцарские часы Tissot с сапфировым стеклом.",
+    "images": [
+      "img/tissot1.jpg",
+      "img/tissot2.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Часы Casio",
+    "price": 15990,
+    "oldPrice": 0,
+    "article": "CAS-002",
+    "sizes": [
+      "One size"
+    ],
+    "description": "Надёжные электронные часы Casio.",
+    "images": [
+      "img/casio.jpg"
+    ]
+  }
+]
