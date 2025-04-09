@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timelux CO — Каталог</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #111;
+    }
+    header {
+      padding: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
+    }
+    .product {
+      border-bottom: 1px solid #eee;
+      padding: 1rem;
+    }
+    .product h3 {
+      margin: 0.5rem 0;
+    }
+    .product img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .product .price {
+      margin: 0.5rem 0;
+    }
+    .product .article {
+      font-size: 0.8rem;
+      color: #999;
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .cart {
+      padding: 1rem;
+      border-top: 2px solid #000;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #ddd;
+      background: #fff;
+      padding: 0.5rem 0;
+    }
+    .bottom-nav div {
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>Каталог товаров</header>
+  <div id="catalog">Загрузка...</div>
+
+  <div class="cart">
+    <h2>Корзина</h2>
+    <ul id="cartList"></ul>
+    <p id="totalSum"></p>
+    <button class="btn" onclick="sendOrder()">Оформить заказ</button>
+  </div>
+
+  <div class="bottom-nav">
+    <div>🏠</div>
+    <div>💬</div>
+    <div>👤</div>
+  </div>
+
+  <script>
+    const catalogEl = document.getElementById("catalog");
+    const cartList = document.getElementById("cartList");
+    const totalSum = document.getElementById("totalSum");
+    const cart = [];
+
+    fetch("products.json")
+      .then(res => res.json())
+      .then(data => {
+        catalogEl.innerHTML = "";
+        data.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "product";
+          div.innerHTML = \`
+            <img src="\${item.image}" alt="\${item.title}">
+            <h3>\${item.title}</h3>
+            <div class="price">\${item.price} ₽</div>
+            <div class="article">Артикул: \${item.article || 'нет'}</div>
+            <button class="btn" onclick='addToCart("\${item.title}", \${item.price})'>Добавить</button>
+          \`;
+          catalogEl.appendChild(div);
+        });
+      });
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      renderCart();
+    }
+
+    function renderCart() {
+      cartList.innerHTML = "";
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.name + " — " + item.price + " ₽";
+        cartList.appendChild(li);
+        total += item.price;
+      });
+      totalSum.textContent = "Итого: " + total + " ₽";
+    }
+
+    function sendOrder() {
+      const summary = cart.map(i => \`\${i.name} — \${i.price} ₽\`).join("\n");
+      const total = cart.reduce((sum, i) => sum + i.price, 0);
+      const message = \`Ваш заказ:\n\${summary}\nИтого: \${total} ₽\`;
+
+      Telegram.WebApp.sendData(message);
+      Telegram.WebApp.close();
+    }
+
+    Telegram.WebApp.ready();
+  </script>
+</body>
+</html>
