@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timelux Web App</title>
+  <style>
+    body { font-family: sans-serif; margin: 0; background: #fff; color: #000; }
+    .nav { display: flex; justify-content: space-around; border-top: 1px solid #ccc; padding: 0.5rem 0; position: fixed; bottom: 0; width: 100%; background: #fff; }
+    .nav div { text-align: center; font-size: 0.75rem; color: #000; }
+    .nav div svg { width: 24px; height: 24px; display: block; margin: 0 auto 0.25rem; fill: #000; }
+
+    .product { border-bottom: 1px solid #eee; padding: 1rem; }
+    .btn { padding: 0.5rem 1rem; border: 1px solid #000; background: none; cursor: pointer; border-radius: 5px; }
+    .btn:hover { background: #000; color: #fff; }
+    .cart-controls { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .hidden { display: none; }
+    .cart-badge {
+      background: red;
+      color: white;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      padding: 0 6px;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+    }
+    .icon-wrapper {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div id="catalog">
+    <div class="product" data-id="1" data-name="Часы Tissot" data-price="39990">
+      <h3>Часы Tissot</h3>
+      <p>Цена: 39990 ₽</p>
+      <button class="btn add-btn">Добавить в корзину</button>
+      <div class="cart-controls hidden">
+        <button class="btn minus-btn">−</button>
+        <span class="count">1</span>
+        <button class="btn plus-btn">+</button>
+        <button class="btn go-to-cart">Перейти</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div><svg><use href="#home-icon" /></svg>Каталог</div>
+    <div><svg><use href="#heart-icon" /></svg>Избранное</div>
+    <div class="icon-wrapper">
+      <svg><use href="#cart-icon" /></svg>
+      <div id="cart-count" class="cart-badge hidden">0</div>
+      <div>Корзина</div>
+    </div>
+    <div><svg><use href="#chat-icon" /></svg>Чат</div>
+    <div><svg><use href="#user-icon" /></svg>Профиль</div>
+  </div>
+
+  <svg style="display: none;">
+    <symbol id="home-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+    <symbol id="heart-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4 8 4 9.5 5 10 6.5 10.5 5 12 4 13.5 4 16 4 18 6 18 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+    <symbol id="cart-icon" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0-2h14v2H7zM1 2h2l3.6 7.59L5.25 14H19v-2H6.42l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L23 4H6.21l-.94-2H1z"/></symbol>
+    <symbol id="chat-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H5.17L4 17.17V4zm0-2c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H4z"/></symbol>
+    <symbol id="user-icon" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></symbol>
+  </svg>
+
+  <script>
+    const addBtn = document.querySelector('.add-btn');
+    const cartControls = document.querySelector('.cart-controls');
+    const minusBtn = document.querySelector('.minus-btn');
+    const plusBtn = document.querySelector('.plus-btn');
+    const countEl = document.querySelector('.count');
+    const goToCart = document.querySelector('.go-to-cart');
+    const cartBadge = document.getElementById("cart-count");
+
+    let count = 1;
+
+    addBtn.addEventListener("click", () => {
+      addBtn.classList.add("hidden");
+      cartControls.classList.remove("hidden");
+      cartBadge.classList.remove("hidden");
+      cartBadge.textContent = count;
+    });
+
+    minusBtn.addEventListener("click", () => {
+      if (count > 1) {
+        count--;
+        countEl.textContent = count;
+        cartBadge.textContent = count;
+      } else {
+        cartControls.classList.add("hidden");
+        addBtn.classList.remove("hidden");
+        cartBadge.classList.add("hidden");
+      }
+    });
+
+    plusBtn.addEventListener("click", () => {
+      count++;
+      countEl.textContent = count;
+      cartBadge.textContent = count;
+    });
+
+    goToCart.addEventListener("click", () => {
+      alert("Переход в корзину (вкладка 'Корзина')");
+    });
+  </script>
+</body>
+</html>
