@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Часы Tissot",
+    "price": 39990,
+    "sku": "TIS001"
+  },
+  {
+    "id": 2,
+    "title": "Часы Casio",
+    "price": 15990,
+    "sku": "CAS002"
+  },
+  {
+    "id": 3,
+    "title": "Часы Seiko",
+    "price": 27990,
+    "sku": "SEI003"
+  }
+]
