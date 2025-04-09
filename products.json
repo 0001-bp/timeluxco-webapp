@@ -3,51 +3,21 @@
     "id": 1,
     "title": "Часы Tissot",
     "price": 39990,
+    "sku": "TISS-001",
     "image": "img/tissot.jpg"
   },
   {
     "id": 2,
     "title": "Часы Casio",
     "price": 15990,
+    "sku": "CASIO-002",
     "image": "img/casio.jpg"
   },
   {
     "id": 3,
     "title": "Часы Seiko",
     "price": 27990,
+    "sku": "SEIKO-003",
     "image": "img/seiko.jpg"
-  },
-  {
-    "title": "",
-    "price": "",
-    "old_price": "",
-    "article": "",
-    "features": [],
-    "media": [
-      [
-        "photo",
-        "AgACAgIAAxkBAAMPZ_Yrk2Or0O0LbyEk9LNUIShtVTsAAn7nMRv7AbFL7LqT7LOYjMABAAMCAAN5AAM2BA"
-      ],
-      [
-        "photo",
-        "AgACAgIAAxkBAAMQZ_Yrk8LPAAE-dhsZDFcAAXIzj6DJBQACf-cxG_sBsUvZxZyJdFkbxAEAAwIAA3kAAzYE"
-      ],
-      [
-        "photo",
-        "AgACAgIAAxkBAAMRZ_Yrk8ErGCDfTagluOziCItxMqQAAoDnMRv7AbFLU0Db8EHijOYBAAMCAAN5AAM2BA"
-      ],
-      [
-        "photo",
-        "AgACAgIAAxkBAAMSZ_Yrk1IAAVdDLo6hJH7ArLLgM6-mAAKB5zEb-wGxS5v1v89YRXhRAQADAgADeQADNgQ"
-      ],
-      [
-        "photo",
-        "AgACAgIAAxkBAAMTZ_Yrk2_UnttIP0rMSQVyBX48d3oAAoLnMRv7AbFL80EnP27IpJoBAAMCAAN5AAM2BA"
-      ],
-      [
-        "photo",
-        "AgACAgIAAxkBAAMUZ_Yrk_mHiVv_U9T_mfTU4cvzi14AAoPnMRv7AbFLVGf6t8ZqOOABAAMCAAN5AAM2BA"
-      ]
-    ]
   }
 ]
