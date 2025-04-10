@@ -7,23 +7,13 @@
     "article": "TSS-001",
     "description": "Элегантные швейцарские часы с сапфировым стеклом.",
     "note": "Акция действует до конца недели",
-    "sizes": [
-      "S",
-      "M",
-      "L"
-    ],
+    "sizes": ["S", "M", "L"],
     "visible": true,
     "isNew": true,
     "isOnSale": true,
     "images": [
-      {
-        "type": "photo",
-        "url": "https://via.placeholder.com/600x600?text=Tissot+1"
-      },
-      {
-        "type": "photo",
-        "url": "https://via.placeholder.com/600x600?text=Tissot+2"
-      }
+      { "type": "photo", "url": "https://via.placeholder.com/600x600?text=Tissot+1" },
+      { "type": "photo", "url": "https://via.placeholder.com/600x600?text=Tissot+2" }
     ]
   },
   {
@@ -34,18 +24,12 @@
     "article": "CAS-002",
     "description": "Надежные японские часы с автоподсветкой.",
     "note": "",
-    "sizes": [
-      "M",
-      "L"
-    ],
+    "sizes": ["M", "L"],
     "visible": true,
     "isNew": false,
     "isOnSale": false,
     "images": [
-      {
-        "type": "photo",
-        "url": "https://via.placeholder.com/600x600?text=Casio"
-      }
+      { "type": "photo", "url": "https://via.placeholder.com/600x600?text=Casio" }
     ]
   }
 ]
