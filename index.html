@@ -1,1 +1,260 @@
-Готовый WebApp был сформирован в предыдущем шаге, но среда была сброшена. Нужно пересобрать при необходимости.
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TimeLux WebApp</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #fff; }
+    .tab-content { display: none; padding-bottom: 80px; }
+    .tab-content.active { display: block; }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #ccc;
+      background: #fff;
+      padding: 0.5rem 0;
+      z-index: 1000;
+    }
+    .bottom-nav div {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #111;
+    }
+    .bottom-nav .icon {
+      font-size: 1.5rem;
+    }
+    .badge {
+      position: absolute;
+      top: 0;
+      right: -4px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      font-size: 0.6rem;
+      padding: 2px 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="catalogTab" class="tab-content active">
+    <h2 style="padding: 1rem;">Каталог</h2>
+    <div id="productList"></div>
+  </div>
+
+  <div id="favoritesTab" class="tab-content">
+    <h2 style="padding: 1rem;">Избранное</h2>
+    <div id="favoritesList"></div>
+  </div>
+
+  <div id="cartTab" class="tab-content">
+    <h2 style="padding: 1rem;">Корзина</h2>
+    <div id="cartList"></div>
+  </div>
+
+  <div id="profileTab" class="tab-content">
+    <h2 style="padding: 1rem;">Профиль</h2>
+    <ul style="list-style:none; padding:1rem; line-height:2;">
+      <li>Заказы</li>
+      <li>Возвраты</li>
+      <li>Поддержка</li>
+    </ul>
+  </div>
+
+  <div class="bottom-nav">
+    <div onclick="switchTab('catalogTab')"><div class="icon">📁</div>Каталог</div>
+    <div onclick="switchTab('favoritesTab')"><div class="icon">❤️</div>Избранное</div>
+    <div style="position:relative;" onclick="switchTab('cartTab')">
+      <div class="icon">🛒<span id="cartBadge" class="badge" style="display:none">0</span></div>Корзина
+    </div>
+    <div onclick="switchTab('profileTab')"><div class="icon">👤</div>Профиль</div>
+  </div>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
+<script>
+  const productList = document.getElementById("productList");
+  const favoritesList = document.getElementById("favoritesList");
+  const cartList = document.getElementById("cartList");
+  const cartBadge = document.getElementById("cartBadge");
+
+  let products = [];
+  let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+  fetch("products.json")
+    .then(res => res.json())
+    .then(data => {
+      products = data;
+      renderCatalog();
+      renderCart();
+      renderFavorites();
+    });
+
+  function renderCatalog() {
+    productList.innerHTML = "";
+    products.forEach(p => {
+      const div = document.createElement("div");
+      const inCart = cart.find(i => i.id === p.id);
+      const isFav = favorites.includes(p.id);
+      div.style = "padding:1rem;border-bottom:1px solid #eee";
+      div.innerHTML = `
+        <div style="position:relative">
+          <img src="${p.images[0]}" alt="${p.title}" style="width:100%;border-radius:12px"/>
+          <div onclick="toggleFav(${p.id})" style="position:absolute;top:10px;right:15px;cursor:pointer;font-size:20px;">${isFav ? "❤️" : "🤍"}</div>
+        </div>
+        <h3>${p.title}</h3>
+        ${p.oldPrice ? `<div style="color:#999;text-decoration:line-through">${p.oldPrice} ₽</div>` : ""}
+        <div><strong>${p.price} ₽</strong></div>
+        <div id="cartControls-${p.id}">${inCart ? cartControls(p.id) : `<button onclick="addToCart(${p.id})">Добавить в корзину</button>`}</div>
+      `;
+      productList.appendChild(div);
+    });
+  }
+
+  function cartControls(id) {
+    const item = cart.find(i => i.id === id);
+    return `
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+        <button onclick="changeQty(${id}, -1)">−</button>
+        <span>${item.qty}</span>
+        <button onclick="changeQty(${id}, 1)">+</button>
+        <button onclick="switchTab('cartTab')">Перейти</button>
+      </div>
+    `;
+  }
+
+  function addToCart(id) {
+    cart.push({ id, qty: 1 });
+    saveCart();
+    renderCatalog();
+    renderCart();
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+    saveCart();
+    renderCatalog();
+    renderCart();
+  }
+
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    const total = cart.reduce((sum, i) => sum + i.qty, 0);
+    cartBadge.style.display = total > 0 ? "inline" : "none";
+    cartBadge.textContent = total;
+  }
+
+  function renderCart() {
+    cartList.innerHTML = "";
+    if (cart.length === 0) {
+      cartList.innerHTML = "<div style='padding:1rem;color:#888'>Корзина пуста</div>";
+      cartBadge.style.display = "none";
+      return;
+    }
+    cart.forEach(item => {
+      const p = products.find(prod => prod.id === item.id);
+      const div = document.createElement("div");
+      div.style = "padding:1rem;border-bottom:1px solid #eee";
+      div.innerHTML = `
+        <strong>${p.title}</strong><br/>
+        ${p.price} ₽ × ${item.qty} = ${p.price * item.qty} ₽
+      `;
+      cartList.appendChild(div);
+    });
+  }
+
+  function toggleFav(id) {
+    if (favorites.includes(id)) {
+      favorites = favorites.filter(f => f !== id);
+    } else {
+      favorites.push(id);
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderCatalog();
+    renderFavorites();
+  }
+
+  function renderFavorites() {
+    favoritesList.innerHTML = "";
+    if (favorites.length === 0) {
+      favoritesList.innerHTML = "<div style='padding:1rem;color:#888'>В избранном пока пусто. Заглянем в каталог?</div>";
+      return;
+    }
+    favorites.forEach(id => {
+      const p = products.find(prod => prod.id === id);
+      const div = document.createElement("div");
+      div.style = "padding:1rem;border-bottom:1px solid #eee";
+      div.innerHTML = `
+        <img src="${p.images[0]}" alt="${p.title}" style="width:100%;border-radius:12px"/>
+        <h3>${p.title}</h3>
+        <div><strong>${p.price} ₽</strong></div>
+      `;
+      favoritesList.appendChild(div);
+    });
+  }
+</script>
+<!-- Внутренняя карточка товара -->
+<div id="productDetails" class="tab-content">
+  <div style="padding:1rem;" id="productInfo"></div>
+</div>
+<script>
+  const productInfo = document.getElementById("productInfo");
+  const detailsTab = document.getElementById("productDetails");
+  let admin = true; // Поставь false, если не админ
+
+  function openProduct(id) {
+    const p = products.find(prod => prod.id === id);
+    if (!p) return;
+
+    productInfo.innerHTML = `
+      <div style="text-align:center;">
+        ${p.images.map(img => `<img src="${img}" style="width:100%;margin-bottom:10px;border-radius:10px;" />`).join("")}
+      </div>
+      <h2>${p.title}</h2>
+      <div><strong>${p.price} ₽</strong> ${p.oldPrice ? `<span style="text-decoration:line-through;color:#888;margin-left:10px;">${p.oldPrice} ₽</span>` : ""}</div>
+      <div style="margin: 1rem 0;"><strong>Артикул:</strong> ${p.article}</div>
+      <div><strong>Размеры:</strong> ${p.sizes.join(", ")}</div>
+      <div style="margin: 1rem 0;">${p.description}</div>
+      ${p.note ? `<div style="background:#f5f5f5;padding:0.5rem;border-radius:5px;">${p.note}</div>` : ""}
+      ${admin ? `<button style="margin-top:1rem;" onclick="editProduct(${p.id})">Редактировать</button>` : ""}
+      <br/><br/><button onclick="switchTab('catalogTab')">← Назад</button>
+    `;
+    switchTab('productDetails');
+  }
+
+  function editProduct(id) {
+    alert("Форма редактирования товара ID: " + id + " (будет позже)");
+  }
+
+  // Заменить кнопки "добавить в корзину" на открытие товара
+  function overrideCardClicks() {
+    document.querySelectorAll("#productList > div").forEach(div => {
+      div.style.cursor = "pointer";
+      div.onclick = () => {
+        const id = products.find(p => div.innerHTML.includes(p.title))?.id;
+        if (id) openProduct(id);
+      };
+    });
+  }
+
+  // Применим после рендера каталога
+  const originalRenderCatalog = renderCatalog;
+  renderCatalog = function() {
+    originalRenderCatalog();
+    overrideCardClicks();
+  };
+</script>
