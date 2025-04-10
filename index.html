@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TimeLux</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; }
+    header { padding: 1rem; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid #eee; }
+    .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; border-top: 1px solid #ddd; padding: 0.5rem 0; }
+    .nav-item { text-align: center; font-size: 12px; }
+    .nav-item span { display: block; font-size: 20px; }
+    .badge { position: absolute; background: red; color: white; font-size: 10px; padding: 2px 6px; border-radius: 999px; top: 0; right: 10px; }
+    .card { padding: 1rem; border-bottom: 1px solid #eee; position: relative; }
+    .card img { width: 100%; border-radius: 12px; }
+    .favorite { position: absolute; top: 12px; right: 16px; font-size: 20px; cursor: pointer; }
+    .price-line { text-decoration: line-through; color: #888; font-size: 0.9rem; }
+    .btn { background: #000; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 20px; margin-top: 0.5rem; cursor: pointer; }
+    .empty { padding: 2rem; text-align: center; color: #888; }
+  </style>
+</head>
+<body>
+  <header>TimeLux</header>
+  <main id="catalog"></main>
+
+  <nav class="nav">
+    <div class="nav-item"><span>🏠</span>Главная</div>
+    <div class="nav-item"><span>📁</span>Каталог</div>
+    <div class="nav-item"><span>🖤</span>Избранное</div>
+    <div class="nav-item"><span>🛒</span>Корзина</div>
+    <div class="nav-item"><span>👤</span>Профиль</div>
+  </nav>
+
+  <script>
+    const catalog = document.getElementById("catalog");
+
+    async function loadProducts() {
+      const res = await fetch("products.json");
+      const data = await res.json();
+      if (!data.length) {
+        catalog.innerHTML = '<div class="empty">Каталог пуст</div>';
+        return;
+      }
+
+      catalog.innerHTML = "";
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          <img src="${item.images[0]}" alt="${item.title}" />
+          <div class="favorite">🖤</div>
+          <h3>${item.title}</h3>
+          ${item.oldPrice ? `<div class="price-line">${item.oldPrice} ₽</div>` : ""}
+          <div><strong>${item.price} ₽</strong></div>
+          <button class="btn" onclick="alert('Открытие товара')">Добавить</button>
+        `;
+        catalog.appendChild(div);
+      });
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>
