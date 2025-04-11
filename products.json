@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "title": "Часы Tissot",
+    "price": 39990,
+    "oldPrice": 44990,
+    "article": "TSS-001",
+    "description": "Элегантные швейцарские часы с сапфировым стеклом.",
+    "note": "Акция действует до конца недели",
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "visible": true,
+    "isNew": true,
+    "isOnSale": true,
+    "images": [
+      {
+        "type": "photo",
+        "url": "https://via.placeholder.com/600x600?text=Tissot+1"
+      },
+      {
+        "type": "photo",
+        "url": "https://via.placeholder.com/600x600?text=Tissot+2"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Часы Casio",
+    "price": 15990,
+    "oldPrice": 0,
+    "article": "CAS-002",
+    "description": "Надежные японские часы с автоподсветкой.",
+    "note": "",
+    "sizes": [
+      "M",
+      "L"
+    ],
+    "visible": true,
+    "isNew": false,
+    "isOnSale": false,
+    "images": [
+      {
+        "type": "photo",
+        "url": "https://via.placeholder.com/600x600?text=Casio"
+      }
+    ]
+  }
+]
